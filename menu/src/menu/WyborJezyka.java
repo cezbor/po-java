@@ -1,13 +1,18 @@
 package menu;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.URL;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 public class WyborJezyka extends JFrame 
 {
@@ -17,13 +22,25 @@ public class WyborJezyka extends JFrame
 	{
 		setSize(640, 480);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		setLayout(new FlowLayout());
+		setLayout(new BorderLayout());
+		setBackground(Color.BLUE);
 		
-		this.add(new JLabel ("Prosze wybrac jezyk"));
-		JButton closeFrameButton = new JButton("Polski");
-		this.add(closeFrameButton);
-		JButton closeFrameButton1 = new JButton("Angielski");
-		this.add(closeFrameButton1);
+		URL plURL = getClass().getResource("res/pl.png");
+		URL enURL = getClass().getResource("res/en.png");
+		this.add(new JLabel ("Prosze wybrac jezyk", JLabel.CENTER), BorderLayout.NORTH);
+		
+		//JButton plButton = new JButton("Polski");
+		JPanel panel = new JPanel(new FlowLayout());
+		JButton plButton = new JButton(new ImageIcon(plURL));
+		plButton.setContentAreaFilled(false);
+		plButton.setMargin(getInsets());
+		//JButton enButton = new JButton("Angielski");
+		JButton enButton = new JButton(new ImageIcon(enURL));
+		enButton.setContentAreaFilled(false);
+		enButton.setMargin(getInsets());
+		panel.add(plButton);
+		panel.add(enButton);		
+		add(panel, BorderLayout.CENTER);
 		
 		
 		
@@ -37,7 +54,7 @@ public class WyborJezyka extends JFrame
 		    	dispose();
 		    }
 		};
-		closeFrameButton1.addActionListener(AngListener);
+		enButton.addActionListener(AngListener);
 		
 		
 		
@@ -53,7 +70,7 @@ public class WyborJezyka extends JFrame
 			}
 		};
 		
-		closeFrameButton.addActionListener(PlListener);
+		plButton.addActionListener(PlListener);
 		
 	}
 	
