@@ -60,7 +60,7 @@ public class MenuGlowneMultiLang extends JFrame
 		this.add(exitButton);
 		
 		
-		ActionListener exitListener2 = new ActionListener() 
+		ActionListener exitListener = new ActionListener() 
 		{
 		    @Override
 		    public void actionPerformed(ActionEvent e) 
@@ -68,8 +68,19 @@ public class MenuGlowneMultiLang extends JFrame
 		        dispose();
 		    }
 		};
-		
-		exitButton.addActionListener(exitListener2);
+		ActionListener newGameListener = new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				GameFrame frame = new GameFrame();
+				frame.setVisible(true);
+	    		dispose();
+				
+			}
+		};
+		newGameButton.addActionListener(newGameListener);
+		exitButton.addActionListener(exitListener);
 	}
 	
 	//Wersja bez obrazków - z samymi napisami
