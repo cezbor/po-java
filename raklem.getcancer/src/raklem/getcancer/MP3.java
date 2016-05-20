@@ -29,13 +29,12 @@ public class MP3 extends Thread
 		try {
 			pl = new Player(stream);
 			pl.play();
-			pl.close();
 		} catch (JavaLayerException e1) {
-			// TODO Auto-generated catch block
+			//  Auto-generated catch block
 			e1.printStackTrace();
 		}
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
+			//  Auto-generated catch block
 			e1.printStackTrace();
 		}
 		
@@ -43,7 +42,35 @@ public class MP3 extends Thread
 	
 	public void close()
 	{
-		pl.close();
+		boolean isClosed = false;
+		boolean printed = false;
+		do
+		{
+			try
+			{
+				pl.close();
+				isClosed = true;
+			}
+			catch (NullPointerException e)
+			{
+				if(!printed)
+				{
+					System.out.println("Wyj¹tek: Za szybko wy³¹czono muzykê (" + getClass().getName() + ")");
+					printed = true;
+				}
+				try
+				{
+					sleep(20);
+				}
+				catch (InterruptedException e1)
+				{
+					//  Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		} 
+		while(!isClosed);
+		
 	}
 	
 }
