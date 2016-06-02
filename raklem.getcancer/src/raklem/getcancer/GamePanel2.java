@@ -19,7 +19,7 @@ public class GamePanel2 extends JPanel implements KeyListener
 {
 	private static final long serialVersionUID = 6288272500065765350L;
 	private int x = 100;
-	private int y = 100;
+	private int y = 400;
 	private double vx = 0;
 	private double vy = 20;
 	private final static double g = 10;
@@ -28,6 +28,8 @@ public class GamePanel2 extends JPanel implements KeyListener
 	private double czas = 0;
 	
 	Obiekt platforma1 = new Obiekt(300, 450, 200, 20);
+	Obiekt platforma2 = new Obiekt(550, 320, 150, 50);
+	Obiekt platforma3 = new Obiekt(100, 220, 150, 20);
 	Obiekt postac = new Obiekt(x, y, "res/logo.png");
 	
 	public GamePanel2( ScheduledExecutorService scheduler)
@@ -43,6 +45,8 @@ public class GamePanel2 extends JPanel implements KeyListener
 				ruchPostaci();
 				kolizjaPostaci();
 				kolizjaPostaci(platforma1);
+				kolizjaPostaci(platforma2);
+				kolizjaPostaci(platforma3);
 				
 			}
 		}, 0, 1000/fps, TimeUnit.MILLISECONDS);
@@ -70,6 +74,8 @@ public class GamePanel2 extends JPanel implements KeyListener
         
         postac.paintComponent(g);
         platforma1.paintComponent(g);
+        platforma2.paintComponent(g);
+        platforma3.paintComponent(g);
         
         g.drawString("Postac: " + postac.info(), 500, 25);
         g.drawString("Platforma 1: " + platforma1.info(), 500, 40);
@@ -153,8 +159,8 @@ public class GamePanel2 extends JPanel implements KeyListener
 		if (postac.getY()  <= granicaGora)
 		{
 			postac.setY(granicaGora);
-			vy = 0;
-			czas = 0;
+			//vy = 0;
+			//czas = 0;
 		}
 		//Lewo
 		if (postac.getX()  <= granicaLewo)
@@ -164,10 +170,10 @@ public class GamePanel2 extends JPanel implements KeyListener
 	}
 	public void kolizjaPostaci(Obiekt ob)
 	{
-		int krawedzGorna = 450; //TODO zrobiæ getami
-		int krawedzDolna = 470;
-		int krawedzLewa = 300;
-		int krawedzPrawa = 500;
+		int krawedzGorna = ob.getY();
+		int krawedzDolna = ob.getY() + ob.getHeight();
+		int krawedzLewa = ob.getX();
+		int krawedzPrawa = ob.getX() + ob.getWidth();
 		
 		int xx = postac.getX();
 		int yy = postac.getY();
@@ -179,14 +185,14 @@ public class GamePanel2 extends JPanel implements KeyListener
 				xx <= krawedzLewa - postac.getWidth() ||
 				xx >= krawedzPrawa))
 		{
-			System.out.println("kolizja");
+			//System.out.println("kolizja");
 			//Góra
-			if (yy + postac.getHeight() >= krawedzGorna)
+			if (yy + postac.getHeight() > krawedzGorna)
 			{
 				postac.setY(krawedzGorna - postac.getHeight());
 				vy = 0;
 				czas = 0;
-				System.out.println("gorna");//TODO dokonczyc
+				//System.out.println("gorna");//TODO dokonczyc
 			}
 			/*
 			//Dó³
