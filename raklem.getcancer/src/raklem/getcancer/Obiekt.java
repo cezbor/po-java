@@ -8,9 +8,9 @@ public class Obiekt extends JPanel
 {
 	private static final long serialVersionUID = 7646954161226994749L;
 	
-	private int x, y;
+	protected int x, y;
 	private ImageIcon img = new ImageIcon();
-	private int width, height;
+	protected int width, height;
 	
 	public Obiekt(int x, int y)
 	{

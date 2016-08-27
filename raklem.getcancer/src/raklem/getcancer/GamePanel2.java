@@ -6,9 +6,11 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.LayoutManager;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
@@ -20,17 +22,23 @@ public class GamePanel2 extends JPanel implements KeyListener
 	private static final long serialVersionUID = 6288272500065765350L;
 	private int x = 100;
 	private int y = 400;
-	private double vx = 0;
 	private double vy = 20;
 	private final static double g = 10;
 	public static enum Kierunek {GORA, DOL, LEWO, PRAWO; boolean flaga;}
 	private final static int fps = 100;
 	private double czas = 0;
 	
-	Obiekt platforma1 = new Obiekt(300, 450, 200, 20);
-	Obiekt platforma2 = new Obiekt(550, 320, 150, 50);
-	Obiekt platforma3 = new Obiekt(100, 220, 150, 20);
-	Obiekt postac = new Obiekt(x, y, "res/logo.png");
+	//Obiekt platforma1 = new Obiekt(300, 450, 200, 20);
+	//Obiekt platforma2 = new Obiekt(550, 320, 150, 50);
+	//Obiekt platforma3 = new Obiekt(100, 220, 150, 20);
+	Obiekt platforma1 = new Obiekt(300, 450, "res/platforma150.png");
+	Obiekt platforma2 = new Obiekt(550, 320, "res/platforma200.png");
+	Obiekt platforma3 = new Obiekt(100, 220, "res/platforma100.png");
+	
+	//Obiekt postac = new Obiekt(x, y, "res/mario.png");
+	Postac postac = new Postac(x, y);
+	
+	private Image tlo= (new ImageIcon(getClass().getResource("res/t³o.jpg")).getImage());
 	
 	public GamePanel2( ScheduledExecutorService scheduler)
 	{
@@ -60,7 +68,7 @@ public class GamePanel2 extends JPanel implements KeyListener
 	{
 		super.paintComponent(g);
 		g.setColor(Color.WHITE);
-		g.fillRect(0, 0, getWidth(), getHeight());
+		g.drawImage(tlo, 0, 0, this);
 		//Siatka
         g.setColor(Color.LIGHT_GRAY);
         for (int i = 100; i<1000; i += 100)
@@ -79,7 +87,7 @@ public class GamePanel2 extends JPanel implements KeyListener
         
         g.drawString("Postac: " + postac.info(), 500, 25);
         g.drawString("Platforma 1: " + platforma1.info(), 500, 40);
-        
+       // g.drawString("Postac2: " + postac2.info(), 500, 55);
         
         
         //g.drawRect(0, 0, 800, 600);  //RAMKA
@@ -100,20 +108,31 @@ public class GamePanel2 extends JPanel implements KeyListener
 		
 		repaint();
 	}
-
+	
 	@Override
 	public void keyPressed(KeyEvent e)
 	{
 		int kod = e.getKeyCode();
-		System.out.println("przycisk: " + kod);
+		//System.out.println("przycisk: " + kod);
 		if (kod == 39)
+		{
+			postac.prawo();
 			Kierunek.PRAWO.flaga = true;
+		}
 		if (kod == 37)
+		{
+			postac.lewo();
 			Kierunek.LEWO.flaga = true;
+		}
 		if (kod == 40)
+		{
 			Kierunek.DOL.flaga = true;
+		}
 		if (kod == 38)
+		{
+			postac.skok();
 			Kierunek.GORA.flaga = true;
+		}
 		//repaint();
 	}
 
@@ -122,13 +141,24 @@ public class GamePanel2 extends JPanel implements KeyListener
 	{
 		int kod = e.getKeyCode();
 		if (kod == 39)
+		{
+			postac.prawo();
 			Kierunek.PRAWO.flaga = false;
+		}
 		if (kod == 37)
+		{
+			postac.lewo();
 			Kierunek.LEWO.flaga = false;
+		}
 		if (kod == 40)
+		{
 			Kierunek.DOL.flaga = false;
+		}
 		if (kod == 38)
+		{
+			postac.lewoPrawo();
 			Kierunek.GORA.flaga = false;
+		}
 	}
 
 	@Override
@@ -138,8 +168,8 @@ public class GamePanel2 extends JPanel implements KeyListener
 	
 	public void kolizjaPostaci()
 	{
-		int granicaDol = 600;
-		int granicaPrawo = 800;
+		int granicaDol = getHeight();  //600
+		int granicaPrawo = getWidth();  //800
 		int granicaGora = 0;
 		int granicaLewo = 0;
 		

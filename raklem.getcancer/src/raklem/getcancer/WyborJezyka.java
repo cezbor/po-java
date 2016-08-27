@@ -27,7 +27,7 @@ public class WyborJezyka extends JFrame
 		
 		URL plURL = getClass().getResource("res/pl.png");
 		URL enURL = getClass().getResource("res/en.png");
-		this.add(new JLabel ("Prosze wybrac jezyk", JLabel.CENTER), BorderLayout.NORTH);
+		this.add(new JLabel ("Prosze wybrac jezyk / Choose your language", JLabel.CENTER), BorderLayout.NORTH);
 		JPanel panel = new JPanel(new FlowLayout());
 		JButton plButton = new JButton(new ImageIcon(plURL));
 		plButton.setContentAreaFilled(false);

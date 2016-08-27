@@ -13,10 +13,12 @@ public class GameFrame extends JFrame
 {
 	private static final long serialVersionUID = -3568173389323253243L;
 
+	private MP3 muz = new MP3(getClass().getResource("res/music.mp3"));
+	
 	public GameFrame() throws HeadlessException
 	{
 		setSize(900, 700);
-		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setLayout(new BorderLayout());
 		
 		ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(2);
@@ -26,6 +28,8 @@ public class GameFrame extends JFrame
 		panel.addKeyListener(panel);
 		panel.setFocusable(true);
 		this.add(panel);
+		
+		muz.start();
 		
 		WindowListener a = new WindowAdapter()
 		{
