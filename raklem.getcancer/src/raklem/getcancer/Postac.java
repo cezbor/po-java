@@ -8,13 +8,11 @@ import javax.swing.JPanel;
 public class Postac extends Obiekt
 {
 	private static final long serialVersionUID = 2298056819025504218L;
-	//private int x, y;
 	private ImageIcon img;
 	private ImageIcon imgLewo = new ImageIcon(getClass().getResource("res/mariolew.png"));
 	private ImageIcon imgPrawo = new ImageIcon(getClass().getResource("res/mario.png"));
 	private ImageIcon imgSkokLewo = new ImageIcon(getClass().getResource("res/mariojump_lewo.png"));
 	private ImageIcon imgSkokPrawo = new ImageIcon(getClass().getResource("res/mariojump_prawo.png"));
-	//private int width, height;
 	
 	public Postac(int x, int y)
 	{
@@ -30,7 +28,6 @@ public class Postac extends Obiekt
 	@Override
 	protected void paintComponent(Graphics g)
 	{
-		//super.paintComponent(g);
         g.drawImage(img.getImage(), x, y, this);
 	}
 

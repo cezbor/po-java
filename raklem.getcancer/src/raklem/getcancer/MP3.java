@@ -30,11 +30,9 @@ public class MP3 extends Thread
 			pl = new Player(stream);
 			pl.play();
 		} catch (JavaLayerException e1) {
-			//  Auto-generated catch block
 			e1.printStackTrace();
 		}
 		} catch (IOException e1) {
-			//  Auto-generated catch block
 			e1.printStackTrace();
 		}
 		
@@ -64,7 +62,6 @@ public class MP3 extends Thread
 				}
 				catch (InterruptedException e1)
 				{
-					//  Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}

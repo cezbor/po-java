@@ -1,5 +1,6 @@
 package raklem.getcancer;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.FlowLayout;
@@ -27,9 +28,8 @@ public class MenuGlowneMultiLang extends JFrame
 	public MenuGlowneMultiLang(String lang) 
 	{
 		setSize(640, 480);
-		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setLayout(new FlowLayout());
-		setBackground(Color.BLUE); //Czemu nie dzia³a????
 		
 		URL newGame = null, options = null, exit = null;
 		if (lang == "EN")
@@ -49,19 +49,20 @@ public class MenuGlowneMultiLang extends JFrame
 		newGameButton.setContentAreaFilled(false);
 		newGameButton.setMargin(getInsets());
 		newGameButton.setOpaque(false);
-		
+		/*
 		JButton optionsButton = new JButton(new ImageIcon(options));
 		optionsButton.setContentAreaFilled(false);
 		optionsButton.setMargin(getInsets());
 		optionsButton.setOpaque(false);
-		
+		*/
 		JButton exitButton = new JButton(new ImageIcon(exit));
 		exitButton.setContentAreaFilled(false);
 		exitButton.setMargin(getInsets());
 		exitButton.setOpaque(false);
 		
+		
 		this.add(newGameButton);
-		this.add(optionsButton);
+		//this.add(optionsButton);
 		this.add(exitButton);
 		
 		muz.start();
@@ -86,6 +87,7 @@ public class MenuGlowneMultiLang extends JFrame
 				
 			}
 		};
+		/*
 		ActionListener optionsListener = new ActionListener()
 		{
 			@Override
@@ -97,10 +99,10 @@ public class MenuGlowneMultiLang extends JFrame
 				
 			}
 		};
-		
+		*/
 		newGameButton.addActionListener(newGameListener);
 		exitButton.addActionListener(exitListener);
-		optionsButton.addActionListener(optionsListener);
+		//optionsButton.addActionListener(optionsListener);
 		
 		WindowListener a = new WindowAdapter()
 		{

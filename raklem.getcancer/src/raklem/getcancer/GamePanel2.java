@@ -1,20 +1,16 @@
 package raklem.getcancer;
 
 import java.awt.Color;
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.LayoutManager;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.image.BufferedImage;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class GamePanel2 extends JPanel implements KeyListener
@@ -27,40 +23,36 @@ public class GamePanel2 extends JPanel implements KeyListener
 	public static enum Kierunek {GORA, DOL, LEWO, PRAWO; boolean flaga;}
 	private final static int fps = 100;
 	private double czas = 0;
-	
-	//Obiekt platforma1 = new Obiekt(300, 450, 200, 20);
-	//Obiekt platforma2 = new Obiekt(550, 320, 150, 50);
-	//Obiekt platforma3 = new Obiekt(100, 220, 150, 20);
+	GameFrame frame;
+
 	Obiekt platforma1 = new Obiekt(300, 450, "res/platforma150.png");
 	Obiekt platforma2 = new Obiekt(550, 320, "res/platforma200.png");
 	Obiekt platforma3 = new Obiekt(100, 220, "res/platforma100.png");
-	
-	//Obiekt postac = new Obiekt(x, y, "res/mario.png");
 	Postac postac = new Postac(x, y);
+	Obiekt rak = new Obiekt(120, 177, "res/rak.png");
 	
-	private Image tlo= (new ImageIcon(getClass().getResource("res/t³o.jpg")).getImage());
+	private Image tlo= (new ImageIcon(getClass().getResource("res/tlo.jpg")).getImage());
 	
-	public GamePanel2( ScheduledExecutorService scheduler)
+	public GamePanel2( ScheduledExecutorService scheduler, GameFrame frame)
 	{
 		super();
+		this.frame = frame;
 		scheduler.scheduleAtFixedRate(new Runnable()
 		{
 			public void run()
 			{
-				czas = czas + 1./fps;
-				//System.out.println(czas);
+				czas = czas + 1./100;
 				spadek(czas);
 				ruchPostaci();
 				kolizjaPostaci();
 				kolizjaPostaci(platforma1);
 				kolizjaPostaci(platforma2);
 				kolizjaPostaci(platforma3);
+				wygrana(scheduler);
 				
 			}
 		}, 0, 1000/fps, TimeUnit.MILLISECONDS);
 		
-		//System.out.println(postac.getHeight());
-		//System.out.println( "szer: " + getWidth() +" wys: " +  getHeight());
 	}
 	
 	@Override
@@ -69,32 +61,27 @@ public class GamePanel2 extends JPanel implements KeyListener
 		super.paintComponent(g);
 		g.setColor(Color.WHITE);
 		g.drawImage(tlo, 0, 0, this);
-		//Siatka
-        g.setColor(Color.LIGHT_GRAY);
-        for (int i = 100; i<1000; i += 100)
-        {
-        	g.drawLine(i, 0, i, 1000);
-        	g.drawLine(0, i, 1000, i);
-        }
-        
         g.setColor(Color.black);
-        g.drawString("czas: " + czas + " s", 500, 10);
         
         postac.paintComponent(g);
         platforma1.paintComponent(g);
         platforma2.paintComponent(g);
         platforma3.paintComponent(g);
+        rak.paintComponent(g);
         
-        g.drawString("Postac: " + postac.info(), 500, 25);
-        g.drawString("Platforma 1: " + platforma1.info(), 500, 40);
+       // g.drawString("czas: " + czas + " s", 500, 10);
+       // g.drawString("Postac: " + postac.info(), 500, 25);
+       // g.drawString("Platforma 1: " + platforma1.info(), 500, 40);
        // g.drawString("Postac2: " + postac2.info(), 500, 55);
         
-        
-        //g.drawRect(0, 0, 800, 600);  //RAMKA
-       // g.fillRect(0, 300, getWidth(), getHeight());
-       // System.out.println( "szer: " + getWidth() +" wys: " +  getHeight());
 	}
 
+	public void spadek(double t)
+	{
+		vy = vy - g * t;
+		postac.setY( (int) ( postac.getY() + ( - vy * t + g * t * t / 2) ));
+	}
+	
 	void ruchPostaci()
 	{
 		if (Kierunek.PRAWO.flaga == true)
@@ -108,6 +95,7 @@ public class GamePanel2 extends JPanel implements KeyListener
 		
 		repaint();
 	}
+
 	
 	@Override
 	public void keyPressed(KeyEvent e)
@@ -133,7 +121,6 @@ public class GamePanel2 extends JPanel implements KeyListener
 			postac.skok();
 			Kierunek.GORA.flaga = true;
 		}
-		//repaint();
 	}
 
 	@Override
@@ -215,14 +202,13 @@ public class GamePanel2 extends JPanel implements KeyListener
 				xx <= krawedzLewa - postac.getWidth() ||
 				xx >= krawedzPrawa))
 		{
-			//System.out.println("kolizja");
 			//Góra
 			if (yy + postac.getHeight() > krawedzGorna)
 			{
 				postac.setY(krawedzGorna - postac.getHeight());
 				vy = 0;
 				czas = 0;
-				//System.out.println("gorna");//TODO dokonczyc
+				//System.out.println("gorna");
 			}
 			/*
 			//Dó³
@@ -250,10 +236,28 @@ public class GamePanel2 extends JPanel implements KeyListener
 		
 		
 	}
-	
-	public void spadek(double t)
+	public void wygrana(ScheduledExecutorService scheduler)
 	{
-		vy = vy - g * t;
-		postac.setY( (int) ( postac.getY() + ( - vy * t + g * t * t / 2) ));
+		int krawedzGorna = rak.getY();
+		int krawedzDolna = rak.getY() + rak.getHeight();
+		int krawedzLewa = rak.getX();
+		int krawedzPrawa = rak.getX() + rak.getWidth();
+		
+		int xx = postac.getX();
+		int yy = postac.getY();
+		
+		if (!(yy + postac.getHeight() <= krawedzGorna ||
+				yy >= krawedzDolna ||
+				xx <= krawedzLewa - postac.getWidth() ||
+				xx >= krawedzPrawa))
+		{
+			System.out.println("WYGRALES!");
+			scheduler.shutdown();
+			JOptionPane.showMessageDialog(this, "Gratulacje, wygra³eœ!");
+			System.out.println("Koniec!");
+			System.exit(0);
+		}
 	}
+	
+	
 }

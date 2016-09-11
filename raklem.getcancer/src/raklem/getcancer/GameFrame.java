@@ -1,6 +1,7 @@
 package raklem.getcancer;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.HeadlessException;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -17,14 +18,14 @@ public class GameFrame extends JFrame
 	
 	public GameFrame() throws HeadlessException
 	{
-		setSize(900, 700);
+		setSize(900, 645);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setLayout(new BorderLayout());
+		setMaximumSize(new Dimension(1215, 817));
 		
 		ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(2);
-		//scheduler.scheduleAtFixedRate(timer, 0, 100, TimeUnit.MILLISECONDS);
 		
-		GamePanel2 panel = new GamePanel2(scheduler);
+		GamePanel2 panel = new GamePanel2(scheduler, this);
 		panel.addKeyListener(panel);
 		panel.setFocusable(true);
 		this.add(panel);
@@ -36,13 +37,11 @@ public class GameFrame extends JFrame
 			@Override
 			public void windowClosed(WindowEvent arg0)
 			{
-				// TODO Auto-generated method stub
 				System.out.println("wy³¹czono");
 				scheduler.shutdownNow();
 			}
 		};
 		this.addWindowListener(a);
-		//System.out.println(timer.getTime());
 		
 	}
 }
